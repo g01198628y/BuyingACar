@@ -16,15 +16,24 @@ namespace BuyingACar
             }
 
             var month = 0;
-            var totalSaving = 0;
+            int leftMoney;
+            do
+            {
+                month++;
+                if (month % 2 == 0)
+                {
+                    percentLossByMonth += 0.5;
+                }
+                startPriceOld = (int)(startPriceOld * (1 - percentLossByMonth / 100));
+                startPriceNew = (int)(startPriceNew * (1 - percentLossByMonth / 100));
 
-            month += 1;
-            totalSaving += savingPerMonth;
-            startPriceOld = (int)(startPriceOld * (1 - (percentLossByMonth / 100)));
-            startPriceNew = (int)(startPriceNew * (1 - (percentLossByMonth / 100)));
-            var left = totalSaving + startPriceOld - startPriceNew;
-
-            return new[] { month, left };
+                leftMoney = month * savingPerMonth + startPriceOld - startPriceNew;
+                if (leftMoney > 0)
+                {
+                    return new[] { month, leftMoney };
+                }
+            } while (leftMoney <= 0);
+            return new[] { 0, 0 };
         }
     }
 }
