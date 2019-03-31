@@ -10,16 +10,10 @@ namespace BuyingACar
     {
         public static int[] NbMonths(int startPriceOld, int startPriceNew, int savingPerMonth, double percentLossByMonth)
         {
-            if (startPriceOld >= startPriceNew)
-            {
-                return new[] { 0, startPriceOld - startPriceNew };
-            }
-
             var month = 0;
             var ratio = 1 - percentLossByMonth / 100;
-            int leftMoney;
 
-            do
+            while (savingPerMonth + startPriceOld < startPriceNew)
             {
                 month++;
                 if (month % 2 == 0)
@@ -30,13 +24,13 @@ namespace BuyingACar
                 startPriceOld = (int)(startPriceOld * ratio);
                 startPriceNew = (int)(startPriceNew * ratio);
 
-                leftMoney = month * savingPerMonth + startPriceOld - startPriceNew;
+                var leftMoney = month * savingPerMonth + startPriceOld - startPriceNew;
                 if (leftMoney > 0)
                 {
                     return new[] { month, leftMoney };
                 }
-            } while (leftMoney <= 0);
-            return new[] { 0, 0 };
+            }
+            return new[] { 0, startPriceOld - startPriceNew };
         }
     }
 }
